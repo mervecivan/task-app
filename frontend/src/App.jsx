@@ -36,7 +36,7 @@ export default function App() {
         setUser(me);
         setProfileName(me.name);
         const list = await api.listTasks();
-        setTasks(list);
+        setTasks(list ?? []);
       } catch {
       } finally {
         setLoading(false);
@@ -52,7 +52,7 @@ export default function App() {
       setUser(me);
       setProfileName(me.name);
       const list = await api.listTasks();
-      setTasks(list);
+      setTasks(list ?? []);
     } catch (err) {
       setError(err.message);
     }
@@ -66,7 +66,7 @@ export default function App() {
       setUser(me);
       setProfileName(me.name);
       const list = await api.listTasks();
-      setTasks(list);
+      setTasks(list ?? []);
     } catch (err) {
       setError(err.message);
     }
@@ -123,7 +123,7 @@ export default function App() {
       });
       setTaskForm({ title: '', body: '' });
       const list = await api.listTasks();
-      setTasks(list);
+      setTasks(list ?? []);
     } catch (err) {
       setError(err.message);
     }
@@ -135,7 +135,7 @@ export default function App() {
     try {
       await api.updateTaskStatus(task.id, newStatus);
       const list = await api.listTasks();
-      setTasks(list);
+      setTasks(list ?? []);
     } catch (err) {
       setError(err.message);
     }
@@ -448,4 +448,3 @@ export default function App() {
     </div>
   );
 }
-

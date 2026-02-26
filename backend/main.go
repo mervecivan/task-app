@@ -357,7 +357,7 @@ func (a *App) handleListTasks(c *fiber.Ctx) error {
 	}
 	defer rows.Close()
 
-	var tasks []Task
+	tasks := make([]Task, 0)
 	for rows.Next() {
 		var t Task
 		if err := rows.Scan(&t.ID, &t.Title, &t.Body, &t.Status, &t.CompletedAt, &t.CreatedAt, &t.UpdatedAt); err != nil {
