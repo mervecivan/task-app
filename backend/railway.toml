@@ -1,0 +1,5 @@
+echo '[build]
+buildCommand = "go build -o main ."
+
+[deploy]
+startCommand = "./main"' > railway.toml
