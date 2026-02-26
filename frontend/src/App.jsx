@@ -435,7 +435,7 @@ export default function App() {
                             : 'bg-amber-50 text-amber-700 border border-amber-100'
                         }`}
                       >
-                        {t.status === 'done' || t.status === 'completed' ? 'Done' : 'Pending'}
+                        {t.status === 'done' || t.status === 'completed' ? 'Tamamlandı' : 'Bekliyor'}
                       </span>
                     </div>
                   </div>
