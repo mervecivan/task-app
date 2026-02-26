@@ -129,6 +129,17 @@ export default function App() {
     }
   };
 
+  const handleDeleteTask = async (id) => {
+    setError('');
+    try {
+      await api.deleteTask(id);
+      const list = await api.listTasks();
+      setTasks(list ?? []);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   const handleToggleDone = async (task) => {
     setError('');
     const newStatus = task.status === 'done' || task.status === 'completed' ? 'pending' : 'done';
@@ -427,7 +438,7 @@ export default function App() {
                       </div>
                       <p className="text-xs text-slate-600 mt-1 whitespace-pre-wrap">{t.body}</p>
                     </div>
-                    <div className="ml-3 mt-1">
+                    <div className="ml-3 mt-1 flex items-center gap-2">
                       <span
                         className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium ${
                           t.status === 'done' || t.status === 'completed'
@@ -437,6 +448,13 @@ export default function App() {
                       >
                         {t.status === 'done' || t.status === 'completed' ? 'Tamamlandı' : 'Bekliyor'}
                       </span>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteTask(t.id)}
+                        className="text-slate-400 hover:text-red-500 text-xs px-1.5 py-0.5 rounded hover:bg-red-50"
+                      >
+                        Sil
+                      </button>
                     </div>
                   </div>
                 ))}
