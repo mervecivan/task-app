@@ -86,6 +86,9 @@ func main() {
 		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
 		AllowMethods:     "GET,POST,PUT,PATCH,DELETE,OPTIONS",
 	}))
+	f.Options("*", func(c *fiber.Ctx) error {
+		return c.SendStatus(204)
+	})
 
 	api := f.Group("/api")
 
