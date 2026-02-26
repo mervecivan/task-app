@@ -74,7 +74,7 @@ func main() {
 
 	f.Use(logger.New())
 	f.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:5173, http://localhost:5174",
+		AllowOrigins:     "http://localhost:5173, http://localhost:5174, https://task-app-ett8.vercel.app",
 		AllowCredentials: true,
 		AllowHeaders:     "Origin, Content-Type, Accept",
 	}))
