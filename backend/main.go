@@ -6,6 +6,8 @@ import (
 	"os"
 	"time"
 
+	"strings"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
 	_ "github.com/jackc/pgx/v5/stdlib"
@@ -86,6 +88,15 @@ func main() {
 
 	f.Use(func(c *fiber.Ctx) error {
 		origin := c.Get("Origin")
+		if origin == "" {
+			referer := c.Get("Referer")
+			for allowed := range allowedOrigins {
+				if strings.HasPrefix(referer, allowed) {
+					origin = allowed
+					break
+				}
+			}
+		}
 		if allowedOrigins[origin] {
 			c.Response().Header.Set("Access-Control-Allow-Origin", origin)
 			c.Response().Header.Set("Access-Control-Allow-Credentials", "true")
