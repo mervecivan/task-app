@@ -77,11 +77,21 @@ func main() {
 
 	f := fiber.New()
 
+	allowedOrigins := map[string]bool{
+		"https://task-app-ett8.vercel.app":                                      true,
+		"https://task-app-ett8-git-main-freedomcs-projects-969b1141.vercel.app": true,
+		"http://localhost:5173":                                                 true,
+		"http://localhost:5174":                                                 true,
+	}
+
 	f.Use(func(c *fiber.Ctx) error {
-		c.Set("Access-Control-Allow-Origin", "https://task-app-ett8.vercel.app")
-		c.Set("Access-Control-Allow-Credentials", "true")
-		c.Set("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
-		c.Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+		origin := c.Get("Origin")
+		if allowedOrigins[origin] {
+			c.Response().Header.Set("Access-Control-Allow-Origin", origin)
+			c.Response().Header.Set("Access-Control-Allow-Credentials", "true")
+			c.Response().Header.Set("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
+			c.Response().Header.Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+		}
 		if c.Method() == "OPTIONS" {
 			return c.SendStatus(204)
 		}
