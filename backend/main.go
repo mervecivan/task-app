@@ -63,7 +63,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	store := session.New()
+	isProduction := os.Getenv("APP_ENV") == "production"
+
+	store := session.New(session.Config{
+		Expiration:     24 * time.Hour,
+		CookieSecure:   isProduction,
+		CookieHTTPOnly: true,
+		CookieSameSite: "None",
+	})
 
 	app := &App{
 		DB:       db,
@@ -74,9 +81,10 @@ func main() {
 
 	f.Use(logger.New())
 	f.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:5173, http://localhost:5174, https://task-app-ett8.vercel.app",
+		AllowOrigins:     "http://localhost:5173,http://localhost:5174,https://task-app-ett8.vercel.app",
 		AllowCredentials: true,
-		AllowHeaders:     "Origin, Content-Type, Accept",
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
+		AllowMethods:     "GET,POST,PUT,PATCH,DELETE,OPTIONS",
 	}))
 
 	api := f.Group("/api")
