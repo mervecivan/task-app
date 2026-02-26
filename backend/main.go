@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/session"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/joho/godotenv"
@@ -78,7 +77,6 @@ func main() {
 
 	f := fiber.New()
 
-	f.Use(logger.New())
 	f.Use(func(c *fiber.Ctx) error {
 		c.Set("Access-Control-Allow-Origin", "https://task-app-ett8.vercel.app")
 		c.Set("Access-Control-Allow-Credentials", "true")
@@ -88,9 +86,6 @@ func main() {
 			return c.SendStatus(204)
 		}
 		return c.Next()
-	})
-	f.Options("*", func(c *fiber.Ctx) error {
-		return c.SendStatus(204)
 	})
 
 	api := f.Group("/api")
