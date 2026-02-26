@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/session"
 	_ "github.com/jackc/pgx/v5/stdlib"
@@ -80,12 +79,16 @@ func main() {
 	f := fiber.New()
 
 	f.Use(logger.New())
-	f.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:5173,http://localhost:5174,https://task-app-ett8.vercel.app",
-		AllowCredentials: true,
-		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
-		AllowMethods:     "GET,POST,PUT,PATCH,DELETE,OPTIONS",
-	}))
+	f.Use(func(c *fiber.Ctx) error {
+		c.Set("Access-Control-Allow-Origin", "https://task-app-ett8.vercel.app")
+		c.Set("Access-Control-Allow-Credentials", "true")
+		c.Set("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
+		c.Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+		if c.Method() == "OPTIONS" {
+			return c.SendStatus(204)
+		}
+		return c.Next()
+	})
 	f.Options("*", func(c *fiber.Ctx) error {
 		return c.SendStatus(204)
 	})
